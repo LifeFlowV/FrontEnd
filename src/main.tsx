@@ -6,10 +6,19 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { shouldRetryTransientApiError, transientApiRetryDelay } from './services/api';
 import './styles/global.css';
 import './styles/modules.css';
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { refetchOnWindowFocus: false } } });
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: shouldRetryTransientApiError,
+      retryDelay: transientApiRetryDelay,
+    },
+  },
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

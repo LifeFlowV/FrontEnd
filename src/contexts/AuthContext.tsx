@@ -17,7 +17,7 @@ export const AuthContext = createContext<AuthState | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
-  const meQuery = useQuery({ queryKey: ['me'], queryFn: authService.me, retry: false, staleTime: Infinity });
+  const meQuery = useQuery({ queryKey: ['me'], queryFn: authService.me, staleTime: Infinity });
 
   const loginMutation = useMutation({
     mutationFn: authService.login,

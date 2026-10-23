@@ -20,7 +20,7 @@ export function DashboardPage() {
   const { user } = useAuth();
   const [month, setMonth] = useState(currentMonth());
   const dash = useDashboard(month);
-  const health = useQuery({ queryKey: ['health'], queryFn: () => api<{ status: string }>('/actuator/health'), retry: false });
+  const health = useQuery({ queryKey: ['health'], queryFn: () => api<{ status: string }>('/actuator/health') });
   const d = dash.data;
   const range = useMemo(() => { const [y, m] = month.split('-').map(Number); return monthRange(new Date(y, m - 1, 1)); }, [month]);
   const txLink = (extra = '') => `/financas/transacoes?from=${range.from}&to=${range.to}${extra}`;

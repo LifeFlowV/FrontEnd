@@ -8,6 +8,15 @@ export class ApiError extends Error {
   }
 }
 
+/** Só repete leituras após falhas de rede/indisponibilidade temporária. Mutations não usam esta regra. */
+export function shouldRetryTransientApiError(failureCount: number, error: unknown): boolean {
+  return failureCount < 5 && error instanceof ApiError && [0, 502, 503, 504].includes(error.status);
+}
+
+export function transientApiRetryDelay(attemptIndex: number): number {
+  return Math.min(2000 * 2 ** attemptIndex, 8000);
+}
+
 function readCookie(name: string): string | undefined {
   return document.cookie
     .split('; ')

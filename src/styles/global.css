@@ -109,6 +109,7 @@ button { font: inherit; color: inherit; }
 .kv { display: grid; grid-template-columns: 140px 1fr; gap: 8px 16px; margin: 0 0 18px; }
 .kv dt { color: var(--muted); } .kv dd { margin: 0; font-weight: 600; }
 .screen-center { min-height: 100vh; display: grid; place-content: center; justify-items: center; gap: 12px; text-align: center; padding: 24px; }
+.connection-hint { display: block; max-width: 440px; color: var(--muted); font-size: .92rem; }
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
