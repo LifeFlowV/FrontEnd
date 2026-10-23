@@ -12,6 +12,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { TasksPage } from './pages/TasksPage';
+import { TutorialPage } from './pages/TutorialPage';
 import { TransactionsPage } from './pages/TransactionsPage';
 import { InlineLoading } from './components/ScreenMessage';
 import { modules, type ModuleDef } from './routes/modules';
@@ -46,6 +47,7 @@ export default function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
+          <Route path="tutorial" element={<TutorialPage />} />
           <Route path="financas" element={<Navigate to="/financas/transacoes" replace />} />
           <Route path="agenda" element={<Navigate to="/agenda/calendario" replace />} />
           {modules.map((m) => (

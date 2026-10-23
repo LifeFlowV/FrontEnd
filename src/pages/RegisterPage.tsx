@@ -28,7 +28,7 @@ export function RegisterPage() {
     setFormError(undefined);
     try {
       await signUp({ name, email, password });
-      navigate('/', { replace: true });
+      navigate('/', { replace: true, state: { startTutorial: true } });
     } catch (error) {
       if (error instanceof ApiError) {
         const fields = error.fieldErrors ?? {};

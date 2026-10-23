@@ -123,7 +123,7 @@ button { font: inherit; color: inherit; }
   .profile-btn { padding: 4px; }
 
   .mainnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); align-self: auto; }
-  .mainnav > ul { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; height: 62px; }
+  .mainnav > ul { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; height: 62px; }
   .nav-item { position: static; }
   .nav-link { flex-direction: column; justify-content: center; gap: 2px; width: 100%; padding: 0 2px; font-size: .75rem; }
   .nav-link .chevron { display: none; }

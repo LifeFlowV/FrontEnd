@@ -1,5 +1,5 @@
 import {
-  ArrowLeftRight, BarChart3, CalendarDays, CreditCard, HandCoins, Landmark, LayoutDashboard, ListChecks, Settings, Tags, Wallet,
+  ArrowLeftRight, BarChart3, BookOpen, CalendarDays, CreditCard, HandCoins, Landmark, LayoutDashboard, ListChecks, Settings, Tags, Wallet,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -75,6 +75,7 @@ export const mainNav: NavEntry[] = [
   { kind: 'group', key: 'financas', label: 'Finanças', icon: Wallet, items: ['transacoes', 'contas', 'cartoes', 'dividas'].map(byKey) },
   { kind: 'group', key: 'agenda', label: 'Agenda', icon: CalendarDays, items: ['calendario', 'tarefas'].map(byKey) },
   { kind: 'link', key: 'relatorios', label: 'Relatórios', icon: BarChart3, to: `/${byKey('relatorios').path}` },
+  { kind: 'link', key: 'tutorial', label: 'Tutorial', icon: BookOpen, to: '/tutorial' },
 ];
 
 export const profileModules: ModuleDef[] = ['categorias', 'configuracoes'].map(byKey);

@@ -104,6 +104,36 @@
 .cell-flags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
 .amt { display: inline-flex; align-items: center; gap: 3px; }
 .pager { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; }
+
+/* Tutorial */
+.tutorial-progress { height: 7px; background: var(--accent-soft); border-radius: 999px; overflow: hidden; margin: 0 0 10px; }
+.tutorial-progress span { display: block; height: 100%; background: var(--accent); transition: width .2s ease; }
+.tutorial-step-title { margin-top: 16px; }
+.tutorial-tour-actions { display: grid; gap: 4px; margin-top: 18px; }
+.tutorial-tour-actions > .btn { justify-self: start; }
+.tutorial-tour-actions .dialog-actions { margin-top: 10px; }
+.tutorial-header { display: flex; align-items: center; gap: 14px; }
+.tutorial-header > div:nth-child(2) { flex: 1; }
+.tutorial-heading-icon { display: grid; place-items: center; width: 48px; height: 48px; color: var(--accent); background: var(--accent-soft); border-radius: 12px; }
+.tutorial-restart { white-space: nowrap; }
+.tutorial-welcome h2, .tutorial-chapter h2 { margin-bottom: 10px; }
+.tutorial-flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; counter-reset: none; }
+.tutorial-flow li { display: flex; align-items: flex-start; gap: 9px; color: var(--muted); }
+.tutorial-flow li span { display: inline-grid; place-items: center; flex: 0 0 25px; height: 25px; border-radius: 50%; color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+.tutorial-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 18px; }
+.tutorial-chapter { margin-bottom: 0; }
+.tutorial-tips { display: grid; gap: 7px; margin: 14px 0; }
+.tutorial-tips li { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); }
+.tutorial-tips svg { flex: 0 0 auto; color: var(--pos); margin-top: 3px; }
+.tutorial-links { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+.tutorial-link { display: inline-flex; align-items: center; gap: 5px; padding: 3px 2px; border: 0; color: var(--accent); background: transparent; font: inherit; font-weight: 650; cursor: pointer; }
+.tutorial-link:hover { text-decoration: underline; }
+@media (max-width: 760px) {
+  .tutorial-header { align-items: flex-start; flex-wrap: wrap; }
+  .tutorial-restart { margin-left: 62px; }
+  .tutorial-flow { grid-template-columns: 1fr; }
+  .tutorial-chapters { grid-template-columns: 1fr; }
+}
 .segmented { border: 0; padding: 0; margin: 0 0 14px; display: flex; gap: 8px; flex-wrap: wrap; }
 .segmented legend { font-weight: 600; padding: 0; margin-bottom: 6px; }
 .segmented label { position: relative; cursor: pointer; }
