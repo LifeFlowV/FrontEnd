@@ -12,8 +12,22 @@ function query(params: Record<string, string | number | undefined>): string {
 
 export interface ListParams extends TransactionFilters { page: number; size: number; sort: string; dir: 'asc' | 'desc' }
 
+async function listAll(filters: TransactionFilters, sort: string, dir: 'asc' | 'desc') {
+  const size = 100;
+  const first = await api<Page<Transaction>>(`/transactions${query({ ...filters, page: 0, size, sort, dir })}`);
+  const transactions = [...first.content];
+
+  for (let page = 1; page < first.totalPages; page += 1) {
+    const next = await api<Page<Transaction>>(`/transactions${query({ ...filters, page, size, sort, dir })}`);
+    transactions.push(...next.content);
+  }
+
+  return transactions;
+}
+
 export const transactionService = {
   list: (p: ListParams) => api<Page<Transaction>>(`/transactions${query({ ...p })}`),
+  listAll,
   summary: (f: TransactionFilters) => api<TransactionSummary>(`/transactions/summary${query({ ...f })}`),
   create: (input: TransactionInput) => api<Transaction>('/transactions', { method: 'POST', body: input }),
   update: (id: string, input: TransactionInput) => api<Transaction>(`/transactions/${id}`, { method: 'PUT', body: input }),

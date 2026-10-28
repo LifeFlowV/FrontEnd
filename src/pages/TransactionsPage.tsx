@@ -1,5 +1,5 @@
 import {
-  AlertTriangle, ArrowDownLeft, ArrowLeftRight, ArrowUpRight, Ban, CheckCircle2, Clock, Pencil, Plus, Trash2, Undo2, Wallet,
+  AlertTriangle, ArrowDownLeft, ArrowLeftRight, ArrowUpRight, Ban, CheckCircle2, Clock, Download, Pencil, Plus, Trash2, Undo2, Wallet,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -14,9 +14,11 @@ import { useDebounced } from '../hooks/useDebounced';
 import { categoryOptions, useLookups } from '../hooks/useLookups';
 import { useTransactionMutations, useTransactionSummary, useTransactions } from '../hooks/useResources';
 import { useToast } from '../hooks/useToast';
+import { transactionService } from '../services/transactionService';
 import type { Transaction, TransactionFilters, TransactionInput, TransactionStatus, TransactionType } from '../types/transaction';
 import { errorMessage } from '../utils/forms';
 import { formatBRL, formatDate, monthRange } from '../utils/format';
+import { serializeCsv } from '../utils/csv';
 
 type Dialogs =
   | { kind: 'form'; tx?: Transaction; type?: 'INCOME' | 'EXPENSE' }
@@ -25,6 +27,7 @@ type Dialogs =
   | null;
 
 const statusLabel: Record<TransactionStatus, string> = { PLANNED: 'Planejada', SETTLED: 'Liquidada', CANCELED: 'Cancelada' };
+const typeLabel: Record<TransactionType, string> = { INCOME: 'Receita', EXPENSE: 'Despesa', TRANSFER_IN: 'Transferência recebida', TRANSFER_OUT: 'Transferência enviada' };
 const isCredit = (t: TransactionType) => t === 'INCOME' || t === 'TRANSFER_IN';
 
 export function TransactionsPage() {
@@ -41,6 +44,7 @@ export function TransactionsPage() {
   const [sort, setSort] = useState('date');
   const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const [page, setPage] = useState(0);
+  const [exporting, setExporting] = useState(false);
   const [dialog, setDialog] = useState<Dialogs>(null);
 
   const q = useDebounced(search.trim());
@@ -80,6 +84,40 @@ export function TransactionsPage() {
   };
   const sortLabel = (field: string) => (sort === field ? (dir === 'asc' ? 'ascending' : 'descending') : 'none');
 
+  const exportTransactions = async () => {
+    setExporting(true);
+    try {
+      const transactions = await transactionService.listAll(filters, sort, dir);
+      const csv = serializeCsv(transactions, [
+        { label: 'Data de competência', value: (t) => t.competenceDate },
+        { label: 'Tipo', value: (t) => typeLabel[t.type] },
+        { label: 'Descrição', value: (t) => t.description },
+        { label: 'Categoria', value: (t) => t.categoryId ? lookups.categoryNames.get(t.categoryId) ?? '' : '' },
+        { label: 'Conta', value: (t) => accountName(t.accountId) },
+        { label: 'Forma de pagamento', value: (t) => methodName(t.paymentMethodId) },
+        { label: 'Status', value: (t) => statusLabel[t.status] },
+        { label: 'Valor (R$)', value: (t) => t.amount.toFixed(2).replace('.', ',') },
+        { label: 'Vencimento', value: (t) => t.dueDate },
+        { label: 'Data de liquidação', value: (t) => t.settledDate },
+        { label: 'Observações', value: (t) => t.notes },
+      ]);
+      const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `lifeflow-transacoes-${from || 'inicio'}-${to || 'fim'}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast.success(`${transactions.length} transações exportadas.`);
+    } catch (e) {
+      toast.error(errorMessage(e));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const rows = list.data?.content ?? [];
   const selected = dialog && 'tx' in dialog ? dialog.tx : undefined;
 
@@ -91,6 +129,7 @@ export function TransactionsPage() {
           <p className="muted">Receitas, despesas e transferências. Só as liquidadas alteram o saldo das contas.</p>
         </div>
         <div className="toolbar">
+          <button className="btn" onClick={() => void exportTransactions()} disabled={exporting} title="Exporta todas as transações que correspondem aos filtros atuais"><Download size={16} aria-hidden="true" /> {exporting ? 'Exportando…' : 'Exportar CSV'}</button>
           <button className="btn btn-primary" onClick={() => setDialog({ kind: 'form', type: 'EXPENSE' })}><Plus size={18} aria-hidden="true" /> Nova transação</button>
           <button className="btn" onClick={() => setDialog({ kind: 'transfer' })}><ArrowLeftRight size={16} aria-hidden="true" /> Transferir</button>
         </div>
