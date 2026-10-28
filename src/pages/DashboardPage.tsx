@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { InlineError, InlineLoading } from '../components/ScreenMessage';
 import { ChartCard, IncomeExpenseChart, LineSeries, PieByName, HorizontalBars, monthLabel } from '../features/charts/Charts';
 import { useAuth } from '../hooks/useAuth';
-import { useDashboard } from '../hooks/useResources';
+import { useBudgets, useDashboard } from '../hooks/useResources';
 import { api } from '../services/api';
 import { currentMonth, formatBRL, formatDate, formatLongDate, monthRange } from '../utils/format';
 
@@ -18,6 +18,7 @@ export function DashboardPage() {
   const { user } = useAuth();
   const [month, setMonth] = useState(currentMonth());
   const dash = useDashboard(month);
+  const budgets = useBudgets(month);
   const health = useQuery({ queryKey: ['health'], queryFn: () => api<{ status: string }>('/actuator/health') });
   const d = dash.data;
   const range = useMemo(() => { const [y, m] = month.split('-').map(Number); return monthRange(new Date(y, m - 1, 1)); }, [month]);
@@ -67,6 +68,28 @@ export function DashboardPage() {
               <h2 id="next-title">Previsão dos próximos meses</h2>
               <ul className="list">{d.forecastNextMonths.map((f) => <li key={f.month} className="list-row"><span className="list-main">{monthLabel(f.month)}</span><span className="num-inline">{formatBRL(f.value)}</span></li>)}</ul>
               <p className="muted small">Contas, obrigações recorrentes, parcelas de dívidas e faturas ainda em aberto.</p>
+            </section>
+            <section className="card" aria-labelledby="budget-summary-title">
+              <h2 id="budget-summary-title">Orçamentos do mês</h2>
+              {budgets.isLoading ? <p className="muted">Carregando limites…</p> : budgets.isError ? (
+                <p className="form-error" role="alert">Não foi possível carregar os orçamentos.</p>
+              ) : !budgets.data?.length ? (
+                <p className="muted">Ainda não há limites definidos para este mês.</p>
+              ) : <ul className="list">
+                {[...budgets.data].sort((a, b) => b.percentageUsed - a.percentageUsed).slice(0, 5).map((budget) => {
+                  const percent = Math.max(0, budget.percentageUsed);
+                  const tone = budget.status === 'EXCEEDED' ? 'neg' : budget.status === 'WARNING' ? 'budget-warning' : '';
+                  return <li key={budget.id} className="list-row">
+                    <div className="list-main">
+                      <span>{budget.categoryName}</span>
+                      <div className="progress" role="img" aria-label={`${Math.round(percent)}% de ${budget.categoryName} utilizado`}><div className={tone} style={{ width: `${Math.min(percent, 100)}%` }} /></div>
+                      <span className="small muted">{formatBRL(budget.spentAmount)} de {formatBRL(budget.limitAmount)} · {percent.toFixed(0)}%</span>
+                    </div>
+                    <span className={`num-inline ${tone}`}>{budget.remainingAmount >= 0 ? `Restam ${formatBRL(budget.remainingAmount)}` : `Excedido ${formatBRL(-budget.remainingAmount)}`}</span>
+                  </li>;
+                })}
+              </ul>}
+              <Link to="/financas/orcamentos">Gerenciar orçamentos</Link>
             </section>
           </div>
 
