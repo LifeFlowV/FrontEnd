@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { describeRecurrence, formatDate, formatDecimal, monthRange, parseBRL } from './format';
+import { currentMonth, describeRecurrence, formatDate, formatDecimal, monthRange, parseBRL } from './format';
 
 describe('parseBRL', () => {
   it.each([['1.234,56', 1234.56], ['1234,5', 1234.5], ['1234', 1234], ['-250', -250], ['R$ 10,50', 10.5], ['1.234', 1234], ['0,99', 0.99]])('aceita %s', (input, expected) => {
@@ -11,6 +11,10 @@ describe('parseBRL', () => {
 });
 
 describe('datas', () => {
+  it('calcula o mês no fuso local em vez de converter a data para UTC', () => {
+    expect(currentMonth(new Date(2026, 9, 1, 0, 30))).toBe('2026-10');
+    expect(currentMonth(new Date(2026, 0, 31, 23, 30))).toBe('2026-01');
+  });
   it('formata datas sem hora sem deslocar o dia por fuso', () => {
     expect(formatDate('2026-10-19')).toBe('19/10/2026');
     expect(formatDate('2026-01-01')).toBe('01/01/2026');

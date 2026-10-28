@@ -35,6 +35,11 @@ export function todayISO(): string {
 export const formatLongDate = (value: Date) =>
   new Intl.DateTimeFormat('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }).format(value);
 
+/** Mês atual no fuso local do usuário, no formato AAAA-MM. */
+export function currentMonth(date: Date = new Date()): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+}
+
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
 /** Primeiro e último dia do mês da data informada, como AAAA-MM-DD. */

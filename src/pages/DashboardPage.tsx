@@ -7,9 +7,7 @@ import { ChartCard, IncomeExpenseChart, LineSeries, PieByName, HorizontalBars, m
 import { useAuth } from '../hooks/useAuth';
 import { useDashboard } from '../hooks/useResources';
 import { api } from '../services/api';
-import { formatBRL, formatDate, formatLongDate, monthRange } from '../utils/format';
-
-const currentMonth = () => new Date().toISOString().slice(0, 7);
+import { currentMonth, formatBRL, formatDate, formatLongDate, monthRange } from '../utils/format';
 
 function Stat({ label, value, tone, to, hint }: { label: string; value: string; tone?: 'pos' | 'neg'; to?: string; hint?: string }) {
   const body = (<><span className="muted small">{label}</span><strong className={tone}>{value}</strong>{hint && <span className="small muted">{hint}</span>}</>);
