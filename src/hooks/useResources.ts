@@ -12,10 +12,27 @@ import type { CardInput, PayInvoiceInput, PurchaseInput } from '../types/card';
 import type { DebtInput, PayInstallmentInput } from '../types/debt';
 import { paymentMethodService, transactionService, type ListParams } from '../services/transactionService';
 import type { PaymentMethodInput, TransactionFilters, TransactionInput, TransferInput } from '../types/transaction';
+import { budgetService } from '../services/budgetService';
+import type { BudgetInput } from '../types/budget';
 
 
 export const useAccounts = (includeArchived: boolean) =>
   useQuery({ queryKey: ['accounts', { includeArchived }], queryFn: () => accountService.list(includeArchived) });
+
+export const useBudgets = (month: string) =>
+  useQuery({ queryKey: ['budgets', month], queryFn: () => budgetService.list(month) });
+
+export function useBudgetMutations() {
+  const queryClient = useQueryClient();
+  const invalidate = () => Promise.all([
+    queryClient.invalidateQueries({ queryKey: ['budgets'] }),
+    queryClient.invalidateQueries({ queryKey: ['dashboard'] }),
+  ]);
+  return {
+    save: useMutation({ mutationFn: (input: BudgetInput) => budgetService.save(input), onSuccess: invalidate }),
+    remove: useMutation({ mutationFn: (id: string) => budgetService.remove(id), onSuccess: invalidate }),
+  };
+}
 
 export function useAccountMutations() {
   const queryClient = useQueryClient();

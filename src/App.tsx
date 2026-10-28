@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from './components/AppLayout';
 import { GuestRoute, ProtectedRoute } from './components/RouteGuards';
 import { AccountsPage } from './pages/AccountsPage';
+import { BudgetsPage } from './pages/BudgetsPage';
 import { CardsPage } from './pages/CardsPage';
 import { DebtsPage } from './pages/DebtsPage';
 import { CategoriesPage } from './pages/CategoriesPage';
@@ -27,6 +28,7 @@ function pageFor(m: ModuleDef) {
     case 'transacoes': return <TransactionsPage />;
     case 'cartoes': return <CardsPage />;
     case 'dividas': return <DebtsPage />;
+    case 'orcamentos': return <BudgetsPage />;
     case 'calendario': return <CalendarPage />;
     case 'relatorios': return <ReportsPage />;
     case 'tarefas': return <TasksPage />;

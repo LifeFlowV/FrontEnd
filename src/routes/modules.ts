@@ -1,5 +1,5 @@
 import {
-  ArrowLeftRight, BarChart3, BookOpen, CalendarDays, CreditCard, HandCoins, Landmark, LayoutDashboard, ListChecks, Settings, Tags, Wallet,
+  ArrowLeftRight, BarChart3, BookOpen, CalendarDays, CreditCard, HandCoins, Landmark, LayoutDashboard, ListChecks, PiggyBank, Settings, Tags, Wallet,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -36,6 +36,9 @@ export const modules: ModuleDef[] = [
     summary: 'Cronograma de parcelas, pagamentos parciais e saldo restante.',
     features: ['Parcelas com juros e encargos', 'Previsão de pagamento por mês', 'Total pago e restante'],
   },
+  { key: 'orcamentos', path: 'financas/orcamentos', label: 'Orçamentos', icon: PiggyBank,
+    summary: 'Defina limites mensais por categoria e acompanhe o que já foi gasto.',
+    features: ['Limite mensal por categoria', 'Aviso ao chegar a 80% e ao ultrapassar o limite', 'Compras no cartão incluídas pelo mês da fatura'] },
   {
     key: 'calendario', path: 'agenda/calendario', label: 'Calendário', icon: CalendarDays,
     summary: 'Compromissos, tarefas e vencimentos financeiros em um só calendário.',
@@ -72,7 +75,7 @@ export type NavEntry =
 /** Navegação principal: 4 entradas. Categorias e Configurações ficam no menu do perfil. */
 export const mainNav: NavEntry[] = [
   { kind: 'link', key: 'visao-geral', label: 'Visão geral', icon: LayoutDashboard, to: '/', end: true },
-  { kind: 'group', key: 'financas', label: 'Finanças', icon: Wallet, items: ['transacoes', 'contas', 'cartoes', 'dividas'].map(byKey) },
+  { kind: 'group', key: 'financas', label: 'Finanças', icon: Wallet, items: ['transacoes', 'contas', 'cartoes', 'dividas', 'orcamentos'].map(byKey) },
   { kind: 'group', key: 'agenda', label: 'Agenda', icon: CalendarDays, items: ['calendario', 'tarefas'].map(byKey) },
   { kind: 'link', key: 'relatorios', label: 'Relatórios', icon: BarChart3, to: `/${byKey('relatorios').path}` },
   { kind: 'link', key: 'tutorial', label: 'Tutorial', icon: BookOpen, to: '/tutorial' },

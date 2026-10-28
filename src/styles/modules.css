@@ -157,7 +157,20 @@
 .table-compact th, .table-compact td { padding: 8px 12px; }
 .debt-amount { display: grid; text-align: right; }
 .debt-amount strong { font-size: 1.15rem; }
+.budget-form { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(160px, .7fr) auto; align-items: end; gap: 12px; }
+.budget-form .field { margin-bottom: 0; }
+.budget-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+.budget-card { margin: 0; }
+.budget-head, .budget-totals { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.budget-head h2 { margin: 0; }
+.budget-totals { font-size: .9rem; flex-wrap: wrap; }
+.budget-warning { color: #a15c00 !important; }
+.progress > div.neg { background: var(--neg); }
+.progress > div.budget-warning { background: #d78b12; }
+.budget-alert { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; color: #a15c00; font-size: .9rem; }
+.budget-alert.neg { color: var(--neg); }
 @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .budget-form { grid-template-columns: 1fr; } }
 
 /* Tarefas, eventos e calendário */
 .task-list { padding: 4px 16px; }
